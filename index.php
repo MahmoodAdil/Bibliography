@@ -25,9 +25,9 @@ $db = new Db();
 
   <center>Practical</STRONG></center>
   <br /><br />
-   
-
-
+   <a href="userSignup.php">Signup</a>
+   <br />
+  <a href="#">Signin</a>
 </div>
  </center>
 

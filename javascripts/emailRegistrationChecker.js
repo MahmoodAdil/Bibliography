@@ -15,7 +15,7 @@ $("#emailstatus").html('<img src="img/loader.gif" align="absmiddle">&nbsp;Checki
 
     $.ajax({  
     type: "POST",  
-    url: "phpFormValidator/emailRegistrationCheck.php",  
+    url: "phpFormValidator/emailRegistrationCheck2.php",  
     data: "email="+ usr,  
     success: function(msg){  
    
