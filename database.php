@@ -39,6 +39,7 @@ class Db {
                         salt VARCHAR(265) NOT NULL,
                         password VARCHAR(265) NOT NULL,
                         memberSince TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        verify BOOL NOT NULL,
                            PRIMARY KEY(id)
                         );";
                 $this->con->query($sql);
@@ -54,6 +55,7 @@ class Db {
             $passtwo=$_POST['pass2'];
             $email=$_POST['email'];
             $emailCheck = new Db();
+            $emailSent = new Db();
             $emailCheckResult = $emailCheck->emailComfirmation($email);
                 if(($passone == $passtwo) && ($emailCheckResult == "email-validation-ok"))
                 {
@@ -68,14 +70,16 @@ class Db {
                         $query->bindParam(':salt', $salt);
                         $query->bindParam(':password', $password);
                         $query->execute();
+                        //sent email for varification
+                        $emailSent->emailSentToUser($email);
                         //signup successfull redirect to signin page
-                        //header("location:index.php");
+                        header("location:signin.php");
+                }
+                elseif ($emailCheckResult == "email-already-registered") {
+                    $_SESSION['email_error']="this email is already registered";
                 }
                 elseif ($passone != $passtwo) {
                     $_SESSION['password_error']="Both password are not same";
-                }
-                elseif ($emailCheck == "email-already-registered") {
-                    $_SESSION['email_error']="this email is already registered";
                 }
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -122,6 +126,21 @@ class Db {
         else{
             return "OK";
         }       
+    }//public function emailComfirmation($email) END
+    public function emailSentToUser($email) {
+        
+        $to = $email;
+        $subject = "My subject";
+        $txt = "Hello world!";
+        // Add the content headers
+                $headers  = 'MIME-Version: 1.0' . "\r\n";
+                $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers = "From: webmaster@example.com" . "\r\n" .
+        "CC: adil143m@gmail.com";
+
+        mail($to,$subject,$txt,$headers);
+
+        
     }//public function emailComfirmation($email) END
     
 }
