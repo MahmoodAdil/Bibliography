@@ -3,10 +3,15 @@ session_start();
 class Db {
     
     protected $con;
-    private $host = "localhost";//"eu-cdbr-azure-west-c.cloudapp.net";
-    private $user = "root";//"bbafb55bdffce4";
-    private $pwd = "";//"5a4ecc10";
-    private $db = "bibliographyDB";//"TecLogLog";
+    // private $host = "localhost";//"eu-cdbr-azure-west-c.cloudapp.net";//mysql.hostinger.co.uk
+    // private $user = "root";//"bbafb55bdffce4";//u810140208_adil
+    // private $pwd = "";//"5a4ecc10";//mmPnTlEw91
+    // private $db = "bibliographyDB";//"TecLogLog";//u810140208_cs615
+    //mapassignment.esy.es 
+    private $host = "mysql.hostinger.co.uk";
+    private $user = "u810140208_adil";
+    private $pwd = "mmPnTlEw91";
+    private $db = "u810140208_cs615";
     
         //Creates a PDO conection & sets error mode to exceptions
         public function __construct(){
