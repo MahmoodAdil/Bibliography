@@ -57,7 +57,7 @@
 			<div class="login-panel panel panel-default">
 				<div class="panel-heading">Already have account</div>
 				<div class="panel-body">
-				<a class="btn btn-default" href="userSignin.php" role="button">Signin</a>
+				<a class="btn btn-default" href="signin.php" role="button">Signin</a>
 				</div>
 			</div>
 		</div>
