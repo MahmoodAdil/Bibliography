@@ -3,12 +3,19 @@ session_start();
 class Db {
     
     protected $con;
-    private $host = "localhost";//"eu-cdbr-azure-west-c.cloudapp.net";//mysql.hostinger.co.uk
-    private $user = "root";//"bbafb55bdffce4";//u810140208_adil
-    private $pwd = "";//"5a4ecc10";//mmPnTlEw91
-    private $db = "bibliographyDB";//"TecLogLog";//u810140208_cs615
+    //localhost
+    // private $host = "localhost";
+    // private $user = "root";
+    // private $pwd = "";
+    // private $db = "bibliographyDB";
+
+    //http://bibliography.azurewebsites.net/
+    private $host = "eu-cdbr-azure-west-c.cloudapp.net";
+    private $user = "bbafb55bdffce4";
+    private $pwd ="5a4ecc10";
+    private $db = "TecLogLog";
    
-    // bibliography.esy.es
+    //bibliography.esy.es
     // private $host = "mysql.hostinger.co.uk";
     // private $user = "u974722529_adil";
     // private $pwd = "I4aYntOBLT";
@@ -48,7 +55,7 @@ class Db {
                         password VARCHAR(265) NOT NULL,
                         memberSince TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                         verify BOOL NOT NULL,
-                           PRIMARY KEY(id)
+                        PRIMARY KEY(id)
                         );";
                 $this->con->query($sql);
                 return true;
@@ -62,6 +69,7 @@ class Db {
                         id INT(11) AUTO_INCREMENT,
                         displayname VARCHAR(65) NOT NULL,
                         owneremail VARCHAR(265) NOT NULL,
+                        amandable BOOL NOT NULL,
                         PRIMARY KEY(id)
                         );";
                 $this->con->query($sql);
@@ -95,8 +103,7 @@ class Db {
                         //sent email for varification
                         $emailSent->emailSentToUser($email);
                         //signup successfull redirect to signin page
-                        $_SESSION['email_sent']="email is sent to user";
-                        header("location:signin.php");
+                        $_SESSION['email_sent']="email is sent to user";header("location:signin.php");
                 }
                 elseif ($emailCheckResult == "email-already-registered") {
                     $_SESSION['email_error']="this email is already registered";
@@ -119,23 +126,22 @@ class Db {
                 $query->execute();
                 // echo a message to say the UPDATE succeeded
                 //Create libraries for user
-                $library1 = "Trash";$library2 = "Unified";
+                $library1 = "Trash";$library2 = "Unified";$amandable='0';
                 echo "string1";
-                $query2 = $this->con->prepare("INSERT INTO library (displayname,owneremail) VALUES (:displayname,:owneremail);");
+                $query2 = $this->con->prepare("INSERT INTO library (displayname,owneremail,amandable) VALUES (:displayname,:owneremail,:amandable);");
                 $query2->bindParam(':displayname', $library1);
                 $query2->bindParam(':owneremail', $email);
+                $query2->bindParam(':amandable', $amandable);
                 $query2->execute();
                 //Create second library
-                $query3 = $this->con->prepare("INSERT INTO library (displayname,owneremail) VALUES (:displayname,:owneremail);");
+                $query3 = $this->con->prepare("INSERT INTO library (displayname,owneremail,amandable) VALUES (:displayname,:owneremail,:amandable);");
                 $query3->bindParam(':displayname', $library2);
                 $query3->bindParam(':owneremail', $email);
-                $query3->execute();
-                //echo $query->rowCount() . " records UPDATED successfully";
-                header("location:signin.php");
+                $query3->bindParam(':amandable', $amandable);
+                $query3->execute();header("location:signin.php");
             }
             else {
-                $_SESSION['email_error']="E-mail error";
-                header("location:verify.php");
+                $_SESSION['email_error']="E-mail error";header("location:verify.php");
             }//return back to page and show error
 
         } catch (PDOException $e) {
@@ -248,6 +254,7 @@ class Db {
                $row = $query->fetch(PDO::FETCH_ASSOC);
                //access the data 
                $userid=$row['id'];
+               $displayname=$row['displayname'];
                $password=$row['password'];
                $salt=$row['salt'];
                //password hash with salt for compare
@@ -257,24 +264,66 @@ class Db {
                 {
                     //echo'password matched';
                     /****************************************************/
-                       $_SESSION['user_login']=$email;
-                    /****************************************************/
-                    header('Location: userindex.php');
-
-                    
+                    $_SESSION['user_login']=$email;
+                    $_SESSION['user_displayname']=$displayname;header("Location:userindex.php");
                 }
                 else{
                 //      echo "    email OK password errorerror    ";
-                $_SESSION['signin_error']="signin_error1";
-                header("location:signin.php");//return back to signin page
+                $_SESSION['signin_error']="signin_error1";header("location:signin.php");//return back to signin page
                 }
                 // echo "     GOOOOOD email OK";
             }
             else{
                 // echo "  email notfound error";
-                $_SESSION['signin_error']="signin_error2";
-                header('Location: signin.php');//return back to signin page
+                $_SESSION['signin_error']="signin_error2";header("Location: signin.php");//return back to signin page
             }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }         
+        
+    }
+     public function changePassword($newPassword) {
+        try{
+            $passone=$_POST['pass1'];
+            $passtwo=$_POST['pass2'];
+            $email=$_POST['email'];
+            if($passone == $passtwo){
+                /******************************************************************************************/
+                        define('SALT_LENGTH', 9);
+                        $salt = substr(md5(uniqid(rand(), true)), 0, SALT_LENGTH);
+                        $password = $salt . hash("sha512", $salt . $passone);
+                /******************************************************************************************/
+                $query = $this->con->prepare("UPDATE usersaccount 
+                SET 
+                  salt = :salt, 
+                  password = :password
+                WHERE email= '$email'");
+                $query->bindParam(':salt', $salt);
+                $query->bindParam(':password', $password);
+                $query->execute();
+                $_SESSION['password_changed']="your password has been changes.";header("location:profile.php");
+            }else{
+                 $_SESSION['password_error']="Both password are not same";header("location:changepassword.php");//return back to previous page
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }         
+        
+    }
+     public function changeDisplayName($newName) {
+        try{
+            $email=$_POST['email'];
+            $displayname=$_POST['displayname'];
+                $query = $this->con->prepare("UPDATE usersaccount 
+                SET 
+                  displayname = :displayname
+                WHERE email= '$email'");
+
+                $query->bindParam(':displayname', $displayname);
+                $query->execute();
+                $_SESSION['user_displayname']=$displayname;
+                $_SESSION['displayname_changed']="your displayname has been changes.";header("location:profile.php");
+            
         } catch (PDOException $e) {
             echo $e->getMessage();
         }         

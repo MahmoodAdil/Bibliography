@@ -1,6 +1,6 @@
 <?php
 	include "core/header.php";
-	// include "core/lock.php";
+	include "core/lock.php";
 	require_once "database.php";
 
 	

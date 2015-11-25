@@ -30,6 +30,10 @@
 <!-- include footer	 -->							
 <?php include "core/footer.php";?>		
 </div>	<!--/.main-->
+
+
+		
+	
 <?php 
 include "core/scriptsFiles.php";
 // include "core/footer.php";
