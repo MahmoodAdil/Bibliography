@@ -99,7 +99,7 @@ class Db {
                         $query->bindParam(':displayname', $params['displayname']);
                         $query->bindParam(':email', $params['email']);
                         $query->bindParam(':salt', $salt);
-                        $query->bindParam(':password', $password)
+                        $query->bindParam(':password', $password);
                         $query->bindParam(':verify', $verify);
                         $query->execute();
                         //sent email for varification
