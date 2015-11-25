@@ -213,7 +213,9 @@ class Db {
         }       
     }//public function emailComfirmation($email) END
     public function emailSentToUser($email) {
-        $domainname= "http://bibliography.esy.es";
+        //$domainname= "http://bibliography.esy.es";
+        $domainname= "http://bibliography.azurewebsites.net";
+        
         $to      = $email; // Send email to our user
         $subject = 'Signup | Verification'; // Give the email a subject 
         $message = '
