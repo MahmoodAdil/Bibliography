@@ -95,7 +95,7 @@ class Db {
                                 $salt = substr(md5(uniqid(rand(), true)), 0, SALT_LENGTH);
                                 $password = $salt . hash("sha512", $salt . $passone);
                         /******************************************************************************************/
-                        $query = $this->con->prepare("INSERT INTO usersaccount (displayname,email,salt,password,verify) VALUES (:displayname,:email,:salt,:password:verify);");
+                        $query = $this->con->prepare("INSERT INTO usersaccount (displayname,email,salt,password,verify) VALUES (:displayname,:email,:salt,:password,:verify);");
                         $query->bindParam(':displayname', $params['displayname']);
                         $query->bindParam(':email', $params['email']);
                         $query->bindParam(':salt', $salt);
