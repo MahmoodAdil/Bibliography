@@ -86,6 +86,7 @@ class Db {
             $email=$_POST['email'];
             $emailCheck = new Db();
             $emailSent = new Db();
+            $verify='0';
             $emailCheckResult = $emailCheck->emailComfirmation($email);
                 if(($passone == $passtwo) && ($emailCheckResult == "email-validation-ok"))
                 {
@@ -94,11 +95,12 @@ class Db {
                                 $salt = substr(md5(uniqid(rand(), true)), 0, SALT_LENGTH);
                                 $password = $salt . hash("sha512", $salt . $passone);
                         /******************************************************************************************/
-                        $query = $this->con->prepare("INSERT INTO usersaccount (displayname,email,salt,password) VALUES (:displayname,:email,:salt,:password);");
+                        $query = $this->con->prepare("INSERT INTO usersaccount (displayname,email,salt,password,verify) VALUES (:displayname,:email,:salt,:password:verify);");
                         $query->bindParam(':displayname', $params['displayname']);
                         $query->bindParam(':email', $params['email']);
                         $query->bindParam(':salt', $salt);
-                        $query->bindParam(':password', $password);
+                        $query->bindParam(':password', $password)
+                        $query->bindParam(':verify', $verify);
                         $query->execute();
                         //sent email for varification
                         $emailSent->emailSentToUser($email);
