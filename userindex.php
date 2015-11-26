@@ -13,6 +13,19 @@
 
 	include "core/topheader.php";//topheader bar
 	include "core/sidenavigation.php";
+
+	//create a new library form handler
+	if(isset($_POST["createNewLibrary"])){
+	    $db->createNewLibrary($_POST);
+	}
+	//edit library form handler
+	if(isset($_POST["editExistingLibrary"])){
+	    $db->changeLibraryName($_POST);
+	}
+	//delete library form handler
+	if(isset($_POST["deleteExistingLibrary"])){
+	    $db->deleteLibrary($_POST);
+	}
 	
 ?>
 <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">		

@@ -344,7 +344,7 @@ class Db {
                 $query->bindParam(':owneremail', $newLibrary['email']);
                 $query->bindParam(':amandable', $amandable);
                 $query->execute();
-                header("location:create_new_library.php");
+                header("location:userindex.php");
             
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -361,7 +361,7 @@ class Db {
 
                 $query->bindParam(':newdisplayname', $newdisplayname);
                 $query->execute();
-                $_SESSION['library_changed']="Library name has been changes.";header("location:edit_existing_library.php");
+                $_SESSION['library_changed']="Library name has been changes.";header("location:userindex.php");
             
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -388,7 +388,7 @@ class Db {
             $query = $this->con->prepare("DELETE FROM library WHERE id = :libraryid;");
             $query->bindParam(':libraryid', $libraryid);
             $query->execute();
-            $_SESSION['library_delete']="Library has been deleted.";header("location:delete_existing_library.php");
+            $_SESSION['library_delete']="Library has been deleted.";header("location:userindex.php");
         } catch (PDOException $e) {
             echo $e->getMessage();
         }

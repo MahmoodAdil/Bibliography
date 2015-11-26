@@ -1,4 +1,76 @@
+<?php
+	require_once "database.php";
+	//connect to our db
+	$db = new Db();
+	$userAmandableLibrary = $db->getAmandableLibrary($_SESSION["user_login"]);
+	
+?>
 <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+<!-- ----------------------------------------------------------------------------------- -->
+	<div class="panel-body">
+		<div class="form-group">
+			<form role="form" id="usersAccountForm" name="usersAccountForm" action="userindex.php" method="POST">
+				<fieldset>
+					<div class="form-group">
+						<input class="form-control" type="hidden" name="email" value="<?php echo $_SESSION["user_login"];?>" readonly>
+					</div>
+					<div class="form-group">
+						<label>Library Name</label>
+						<input class="form-control" placeholder="Library Name" name="displayname" type="text" value="" required>
+					</div>
+					<button class="btn btn-sm btn-primary" name="createNewLibrary" id="createNewLibrary" type="submit">Create a new Library</button>
+				</fieldset>
+			</form>
+		</div>
+	</div><!-- panel-body -->
+
+<!-- ----------------------------------------------------------------------------------- -->
+	<div class="panel-body">
+		<div class="form-group">
+				<form role="form" id="usersAccountForm" name="usersAccountForm" action="userindex.php" method="POST">
+					<fieldset>
+						<div class="form-group">
+							<label>Selects Library</label>
+								<select class="form-control" name="Libraryid">
+								<?php
+								foreach ($userAmandableLibrary as  $key=>$value) {
+									?><option value=<?php echo $value[0]?>><?php echo $value[1] ?></option>;
+								<?php
+								}
+								?>
+								</select>
+						</div>
+						<div class="form-group">
+							<label>Library New Name</label>
+							<input class="form-control" placeholder="Library New Name" name="newdisplayname" type="text" value="" required>
+						</div>
+						<button class="btn btn-sm btn-primary" name="editExistingLibrary" id="editExistingLibrary" type="submit">Change Name Library</button>
+					</fieldset>
+				</form>
+			</div>
+		</div><!-- panel-body -->
+<!-- ----------------------------------------------------------------------------------- -->
+<div class="panel-body divider">
+	<div class="form-group">	
+		<form role="form" id="usersAccountForm" name="usersAccountForm" action="userindex.php" method="POST">
+			<fieldset>
+				<div class="form-group">
+					<label>Selects Library</label>
+						<select class="form-control" name="libraryid">
+						<?php
+						foreach ($userAmandableLibrary as  $key=>$value) {
+							?><option value=<?php echo $value[0]?>><?php echo $value[1] ?></option>;
+						<?php
+						}
+						?>
+						</select>
+				</div>
+				<button class="btn btn-sm btn-primary" name="deleteExistingLibrary" id="deleteExistingLibrary" type="submit">Delete Library</button>
+			</fieldset>
+		</form>
+	</div>
+</div><!-- panel-body -->
+<!-- ----------------------------------------------------------------------------------- -->
 		<form role="search">
 			<div class="form-group">
 				<input type="text" class="form-control" placeholder="Search">
