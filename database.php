@@ -4,16 +4,16 @@ class Db {
     
     protected $con;
     //localhost
-    // private $host = "localhost";
-    // private $user = "root";
-    // private $pwd = "";
-    // private $db = "bibliographyDB";
+    private $host = "localhost";
+    private $user = "root";
+    private $pwd = "";
+    private $db = "bibliographyDB";
 
     //http://bibliography.azurewebsites.net/
-    private $host = "eu-cdbr-azure-west-c.cloudapp.net";
-    private $user = "bbafb55bdffce4";
-    private $pwd ="5a4ecc10";
-    private $db = "TecLogLog";
+    // private $host = "eu-cdbr-azure-west-c.cloudapp.net";
+    // private $user = "bbafb55bdffce4";
+    // private $pwd ="5a4ecc10";
+    // private $db = "TecLogLog";
    
     //bibliography.esy.es
     // private $host = "mysql.hostinger.co.uk";
@@ -332,6 +332,66 @@ class Db {
             echo $e->getMessage();
         }         
         
+    }
+    public function createNewLibrary($newLibrary) {
+        try {
+                           
+                //Create a newlibraries
+                $amandable='1';
+                
+                $query = $this->con->prepare("INSERT INTO library (displayname,owneremail,amandable) VALUES (:displayname,:owneremail,:amandable);");
+                $query->bindParam(':displayname',$newLibrary['displayname']);
+                $query->bindParam(':owneremail', $newLibrary['email']);
+                $query->bindParam(':amandable', $amandable);
+                $query->execute();
+                header("location:create_new_library.php");
+            
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }// createNewLibrary END
+    public function changeLibraryName($libraryNewName) {
+        try{
+            $Libraryid=$_POST['Libraryid'];
+            $newdisplayname=$_POST['newdisplayname'];
+                $query = $this->con->prepare("UPDATE library 
+                SET 
+                  displayname = :newdisplayname
+                WHERE id= '$Libraryid'");
+
+                $query->bindParam(':newdisplayname', $newdisplayname);
+                $query->execute();
+                $_SESSION['library_changed']="Library name has been changes.";header("location:edit_existing_library.php");
+            
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }         
+        
+    }
+    //function for fetch all notes from table notes order by last modified date
+    public function getAmandableLibrary($userEmail){
+        try{
+            $amandable='1';
+            $query = $this->con->prepare("SELECT id, displayname FROM library WHERE owneremail = :owneremail AND amandable =:amandable ORDER BY id DESC;");
+            $query->bindParam(':owneremail', $userEmail);
+            $query->bindParam(':amandable', $amandable);
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+    //delete existing library
+    public function deleteLibrary($libraryID){
+        try{
+            $libraryid=$_POST['libraryid'];
+            $query = $this->con->prepare("DELETE FROM library WHERE id = :libraryid;");
+            $query->bindParam(':libraryid', $libraryid);
+            $query->execute();
+            $_SESSION['library_delete']="Library has been deleted.";header("location:delete_existing_library.php");
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
     }
     
 }
