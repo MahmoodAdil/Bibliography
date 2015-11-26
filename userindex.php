@@ -33,6 +33,23 @@
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">Welcome</div>
+					<?php
+					if (isset($_SESSION['library_created'])) {
+						?><p class="bg-success"><?php echo $_SESSION['library_created'];
+						unset($_SESSION['library_created']); ?></p>
+						<?php
+					}
+					if (isset($_SESSION['library_changed'])) {
+						?><p class="bg-success"><?php echo $_SESSION['library_changed'];
+						unset($_SESSION['library_changed']); ?></p>
+						<?php
+					}
+					if (isset($_SESSION['library_delete'])) {
+						?><p class="bg-success"><?php echo $_SESSION['library_delete'];
+						unset($_SESSION['library_delete']); ?></p>
+						<?php
+					}
+					?>
 				</div>
 			</div>
 		</div><!--/.row-->

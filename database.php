@@ -344,7 +344,7 @@ class Db {
                 $query->bindParam(':owneremail', $newLibrary['email']);
                 $query->bindParam(':amandable', $amandable);
                 $query->execute();
-                header("location:userindex.php");
+                $_SESSION['library_created']="New library is created.";header("location:userindex.php");
             
         } catch (PDOException $e) {
             echo $e->getMessage();
