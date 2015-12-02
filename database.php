@@ -78,6 +78,37 @@ class Db {
                 echo $e->getMessage();
                 }
         }//END function createTable()
+        public function createSharedLibraryTable() {
+            try {
+                $sql = "CREATE TABLE IF NOT EXISTS sharedlibrary (
+                        rowIndex INT(11) AUTO_INCREMENT,
+                        idoflibrary INT(11) NOT NULL,
+                        sharewithemail VARCHAR(265) NOT NULL,
+                        PRIMARY KEY(rowIndex)
+                        );";
+                $this->con->query($sql);
+                return true;
+            } catch (PDOException $e) {
+                echo $e->getMessage();
+                }
+        }//END function sharedLibrary()
+        public function createReferenceTable() {
+            try {
+                $sql = "CREATE TABLE IF NOT EXISTS reference (
+                        id INT(11) AUTO_INCREMENT,
+                        idoflibrary INT(11) NOT NULL,
+                        title VARCHAR(265),
+                        author VARCHAR(265),
+                        year VARCHAR(4),
+                        abstract text,
+                        PRIMARY KEY(id)
+                        );";
+                $this->con->query($sql);
+                return true;
+            } catch (PDOException $e) {
+                echo $e->getMessage();
+                }
+        }//END createReferenceTable sharedLibrary()
         //usersAccountSignup
         public function usersAccountSignup($params) {
         try {
@@ -120,7 +151,7 @@ class Db {
         public function usersAccountVarify($email) {
         try {
             $emailCheck = new Db();
-            $emailCheckResult = $emailCheck->isEmailVarify($email);
+            $emailCheckResult = $emailCheck->isEmailVarify($email,'0');
             if($emailCheckResult == "email-OK")
             {
                 //here is verified
@@ -176,10 +207,11 @@ class Db {
                return "email-is-not-vaild";
             }        
     }//public function emailComfirmation($email) END
-    public function isEmailVarify($email) {
+    public function isEmailVarify($email,$verify) {
         try{
-                $query = $this->con->prepare("SELECT email FROM usersaccount WHERE email = :email AND verify =0;");
+                $query = $this->con->prepare("SELECT email FROM usersaccount WHERE email = :email AND verify =:verify;");
                 $query->bindParam(':email', $email);
+                $query->bindParam(':verify', $verify);
                 $query->execute();
                 //return count($query->fetchAll()) > 0;
                  $rowcount=$query->rowCount();
@@ -215,8 +247,8 @@ class Db {
         }       
     }//public function emailComfirmation($email) END
     public function emailSentToUser($email) {
-        //$domainname= "http://bibliography.esy.es";
-        $domainname= "http://bibliography.azurewebsites.net";
+        $domainname= "http://bibliography.esy.es";
+        //$domainname= "http://bibliography.azurewebsites.net";
         
         $to      = $email; // Send email to our user
         $subject = 'Signup | Verification'; // Give the email a subject 
@@ -369,10 +401,9 @@ class Db {
         
     }
     //function for fetch all notes from table notes order by last modified date
-    public function getAmandableLibrary($userEmail){
+    public function getUserLibrary($userEmail,$amandable){
         try{
-            $amandable='1';
-            $query = $this->con->prepare("SELECT id, displayname FROM library WHERE owneremail = :owneremail AND amandable =:amandable ORDER BY id DESC;");
+            $query = $this->con->prepare("SELECT id, displayname FROM library WHERE owneremail = :owneremail AND amandable =:amandable ORDER BY id ASC;");
             $query->bindParam(':owneremail', $userEmail);
             $query->bindParam(':amandable', $amandable);
             $query->execute();
@@ -381,7 +412,41 @@ class Db {
             echo $e->getMessage();
         }
     }
-    //delete existing library
+    //function for fetch all notes from table notes order by last modified date
+    public function getUserOwnLibrary($userEmail){
+        try{
+            $query = $this->con->prepare("SELECT id, displayname FROM library WHERE owneremail = :owneremail ORDER BY id ASC;");
+            $query->bindParam(':owneremail', $userEmail);
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+    //function for fetch all notes from table notes order by last modified date
+    public function getLibraryOwner($userEmail,$libraryid){
+        try{
+            $query = $this->con->prepare("SELECT id, owneremail FROM library WHERE id=:id AND owneremail = :owneremail AND displayname !='Trash';");
+            $query->bindParam(':id', $libraryid);
+            $query->bindParam(':owneremail', $userEmail);
+            $query->execute();
+            return count($query->fetchAll()) > 0;//is true
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+    //function for fetch all notes from table notes order by last modified date
+    public function getActiceLibraryName($ActiveLibraryid){
+        try{
+            $query = $this->con->prepare("SELECT displayname FROM library WHERE id = :ActiveLibraryid;");
+            $query->bindParam(':ActiveLibraryid', $ActiveLibraryid);
+            $query->execute();
+            return $query->fetch()[0];
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+      //delete existing library
     public function deleteLibrary($libraryID){
         try{
             $libraryid=$_POST['libraryid'];
@@ -393,6 +458,124 @@ class Db {
             echo $e->getMessage();
         }
     }
+      //delete existing library
+    public function ShareActiveLibrary($ShareLibrary){
+        try{//check user is owner of active library so do it share else error
+            $sharewithemail=$_POST['sharewithemail'];
+            $activelibraryid=$_POST['activelibraryid'];
+            $emailCheck = new Db();
+            $emailCheckResult = $emailCheck->isEmailVarify($sharewithemail,'1');
+            $LibraryOwner = new Db();
+            $LibraryOwnerResult = $LibraryOwner->getLibraryOwner($_SESSION["user_login"],$activelibraryid);//check is you are the owner of library
+            
+            
+            if ($sharewithemail ==$_SESSION["user_login"]) {
+                $_SESSION['library_shere_error']="Ohoo its your own email, try again with different email!, ";header("location:userindex.php");
+            }elseif ($LibraryOwnerResult !='1') {
+                $_SESSION['library_shere_error']="Ohoo you can not share this library! ";header("location:userindex.php");
+            }
+            elseif(($emailCheckResult == "email-OK") AND($sharewithemail !=$_SESSION["user_login"])AND($LibraryOwnerResult =='1'))
+            {
+                $query = $this->con->prepare("INSERT INTO sharedlibrary (idoflibrary,sharewithemail) VALUES (:idoflibrary,:sharewithemail);");
+                $query->bindParam(':idoflibrary',$activelibraryid);
+                $query->bindParam(':sharewithemail', $sharewithemail);
+                $query->execute();
+
+                $_SESSION['library_shere_success']="Your Library is shared with, ".$sharewithemail;header("location:userindex.php");
+            }else{
+                $_SESSION['library_shere_error']="This Emil is not registered or verifyed, ".$sharewithemail;header("location:userindex.php");
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+     public function addRefToLibrary($refdata) {
+        try {
+                $query = $this->con->prepare("INSERT INTO reference (idoflibrary,title,author,year,abstract) VALUES (:idoflibrary,:title,:author,:year,:abstract);");
+                $query->bindParam(':idoflibrary',$refdata['idoflibrary']);
+                $query->bindParam(':title', $refdata['title']);
+                $query->bindParam(':author', $refdata['author']);
+                $query->bindParam(':year', $refdata['year']);
+                $query->bindParam(':abstract', $refdata['abstract']);
+                $query->execute();
+                $_SESSION['ref_added']="Reference is added!";header("location:addrefrencetolibrary.php");
+            
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }// createNewLibrary END
+    public function editRefToLibrary($refdata) {
+        try {
+                 $id=$refdata['id'];
+                $query = $this->con->prepare("UPDATE reference 
+                SET 
+                  title = :newtitle,
+                  author = :newauthor,
+                  year = :newyear,
+                  abstract = :newabstract
+                WHERE id= '$id'");
+                  $query->bindParam(':newtitle', $refdata['title']);
+                  $query->bindParam(':newauthor', $refdata['author']);
+                 $query->bindParam(':newyear', $refdata['year']);
+                 $query->bindParam(':newabstract', $refdata['abstract']);
+                $query->execute();
+                //$_SESSION['library_changed']="Library name has been changes.";header("location:userindex.php");
+            
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }// createNewLibrary END
+    //function for fetch all notes from table notes order by last modified date
+    public function getRefrence($refrenceid){
+        try{
+            $query = $this->con->prepare("SELECT * FROM reference WHERE id = :refrenceid;");
+            $query->bindParam(':refrenceid', $refrenceid);
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }//getRefrence END owneremail= :owneremail ;");
+    public function getAllRefrence($sorting){//getAllRefrence($email){
+        try{
+            if(isset($_POST["sortby"])){
+                $columnname=$_POST['columnname'];
+                 $orderby=$_POST['orderby'];
+            }
+            else{
+                $columnname='year';
+                $orderby='DESC';
+            }
+            $tempraryVariable="9";
+            
+            // $columnname='year';
+            // $orderby='DESC';
+            //$owneremail=($_SESSION["user_login"]);
+            //$query = $this->con->prepare("SELECT * FROM library,reference WHERE owneremail= '$owneremail' AND id=idoflibrary;");
+            $query = $this->con->prepare("SELECT * FROM reference WHERE idoflibrary= :idoflibrary ORDER BY $columnname $orderby;");
+            $query->bindParam(':idoflibrary', $tempraryVariable);
+            // $query->bindParam(':columnname', $columnname);
+            // $query->bindParam(':orderby', $orderby);
+            //$query->bindParam(':owneremail', $email);
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }//getRefrence END
+    public function deleterefrence($refid){
+        try{
+            // $deleteid=$refid['deleteid'];
+            // echo "string".$refid;
+            $query = $this->con->prepare("DELETE FROM reference WHERE id= :deleteid;");
+            $query->bindParam(':deleteid', $refid);
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }//deleterefrence END
+
     
 }
 ?>
