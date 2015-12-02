@@ -18,7 +18,7 @@ class Db {
     //bibliography.esy.es
     // private $host = "mysql.hostinger.co.uk";
     // private $user = "u974722529_adil";
-    // private $pwd = "I4aYntOBLT";
+    // private $pwd = "ficXpKVdAN5";
     // private $db = "u974722529_cs615";
 
     
@@ -99,6 +99,7 @@ class Db {
                         idoflibrary INT(11) NOT NULL,
                         title VARCHAR(265),
                         author VARCHAR(265),
+                        keyword VARCHAR(265),
                         year VARCHAR(4),
                         abstract text,
                         PRIMARY KEY(id)
@@ -491,11 +492,12 @@ class Db {
     }
      public function addRefToLibrary($refdata) {
         try {
-                $query = $this->con->prepare("INSERT INTO reference (idoflibrary,title,author,year,abstract) VALUES (:idoflibrary,:title,:author,:year,:abstract);");
+                $query = $this->con->prepare("INSERT INTO reference (idoflibrary,title,author,year,keyword,abstract) VALUES (:idoflibrary,:title,:author,:year,:keyword,:abstract);");
                 $query->bindParam(':idoflibrary',$refdata['idoflibrary']);
                 $query->bindParam(':title', $refdata['title']);
                 $query->bindParam(':author', $refdata['author']);
                 $query->bindParam(':year', $refdata['year']);
+                $query->bindParam(':keyword', $refdata['keyword']);
                 $query->bindParam(':abstract', $refdata['abstract']);
                 $query->execute();
                 $_SESSION['ref_added']="Reference is added!";header("location:addrefrencetolibrary.php");
@@ -506,20 +508,23 @@ class Db {
     }// createNewLibrary END
     public function editRefToLibrary($refdata) {
         try {
-                 $id=$refdata['id'];
+                 $id=$refdata['editid'];
+                 echo "string".$id;
                 $query = $this->con->prepare("UPDATE reference 
                 SET 
                   title = :newtitle,
                   author = :newauthor,
                   year = :newyear,
+                  keyword=:newkeyword,
                   abstract = :newabstract
                 WHERE id= '$id'");
                   $query->bindParam(':newtitle', $refdata['title']);
                   $query->bindParam(':newauthor', $refdata['author']);
                  $query->bindParam(':newyear', $refdata['year']);
+                 $query->bindParam(':newkeyword', $refdata['keyword']);
                  $query->bindParam(':newabstract', $refdata['abstract']);
                 $query->execute();
-                //$_SESSION['library_changed']="Library name has been changes.";header("location:userindex.php");
+                $_SESSION['refrence_edited']="Refrence has been changes.";header("location:userindex.php");
             
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -546,17 +551,13 @@ class Db {
                 $columnname='year';
                 $orderby='DESC';
             }
-            $tempraryVariable="9";
-            
-            // $columnname='year';
-            // $orderby='DESC';
-            //$owneremail=($_SESSION["user_login"]);
-            //$query = $this->con->prepare("SELECT * FROM library,reference WHERE owneremail= '$owneremail' AND id=idoflibrary;");
-            $query = $this->con->prepare("SELECT * FROM reference WHERE idoflibrary= :idoflibrary ORDER BY $columnname $orderby;");
-            $query->bindParam(':idoflibrary', $tempraryVariable);
+
+
+            $owneremail=($_SESSION["user_login"]);
+            $query = $this->con->prepare("SELECT * FROM library,reference WHERE library.owneremail= :owneremail AND reference.idoflibrary=library.id ORDER BY $columnname $orderby;");
             // $query->bindParam(':columnname', $columnname);
             // $query->bindParam(':orderby', $orderby);
-            //$query->bindParam(':owneremail', $email);
+            $query->bindParam(':owneremail', $owneremail);
             $query->execute();
             return $query->fetchAll();
         } catch (PDOException $e) {

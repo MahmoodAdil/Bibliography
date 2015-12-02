@@ -134,7 +134,7 @@
 			</div>
 			<div class="form-group">
 				<label>Libraries to Search</label>
-				<select multiple class="form-control">
+				<select multiple class="form-control" name="selectedLibraries[]">
 					<?php
 					foreach ($userOwnLibrary as  $key=>$value) {
 						?><option value=<?php echo $value[0]?>><?php echo $value[1] ?></option>;

@@ -53,6 +53,10 @@
 										<input class="form-control" type="text" name="year" maxlength="4" size="4" placeholder="Published Year" required>
 									</div>
 									<div class="form-group">
+										<label>Key</label>
+										<input class="form-control" type="text" name="keyword"  placeholder="Key Word" required>
+									</div>
+									<div class="form-group">
 										<label>Abstract</label>
 										<textarea class="form-control" name="abstract" rows="4" required></textarea>
 									</div>

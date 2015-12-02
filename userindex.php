@@ -103,27 +103,29 @@
 					</form>
 					<table class="table table-bordered">
 						<tr>
+						    <th>Select</th>
 						    <th>Author</th>
 						    <th>Title</th> 
 						    <th>year</th>
 						    <th>Key</th>
-						    <th>Edit</th>
 						 <form role="form" action="editrefrencetolibrary.php" method="POST">
 						 <?php
 						 for ($x = 0; $x <count($allRefrenceResult); $x++){?>
 						 	<tr>
-							  <td><?php echo $allRefrenceResult[$x]['author']; ?>
-							  	<input type="hidden" name="editrefid" value="<?php echo $allRefrenceResult[$x]['id']; ?>">
-							  </td>
+						 	  <td><input type="radio" id="editrefid" name="editrefid" value="<?php echo $allRefrenceResult[$x]['id']; ?>" required/></td>
+							  <td><?php echo $allRefrenceResult[$x]['author']; ?></td>
 							  <td><?php echo $allRefrenceResult[$x]['title']; ?></td>
 							  <td><?php echo $allRefrenceResult[$x]['year']; ?></td>
 							  <td><?php echo $allRefrenceResult[$x]['keyword']; ?></td>
-							  <td>
-							  <button class="btn btn-sm btn-primary" name="selectRefLibrary" type="submit">Edit</button></td>
 							</tr>
 						 <?php
 						 }
 						 ?>
+						 	<tr>
+								<td>
+								<button class="btn btn-sm btn-primary" name="selectRefLibrary" type="submit">Edit</button>
+								</td>
+							</tr>
 						</form>
 					</table>
 				</div>
