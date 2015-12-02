@@ -27,6 +27,10 @@
 
 	//get all refrence for current user
 	$allRefrenceResult = $db->getAllRefrence($_SESSION["user_login"]);
+		//sortby form handler
+	if(isset($_POST["sortby"])){
+	    $db->getAllRefrence($_POST);
+	}
 ?>
 <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">		
 		<div class="row">
@@ -47,6 +51,23 @@
 					}
 
 					?>
+					<form role="form" action="deleterefrence.php" method="POST">
+					<div class="form-group form-inline">
+									<label>Sort by:</label>
+									<select class="form-control" name="columnname">
+										<option value="title">Title</option>
+										<option value="author">Author</option>
+										<option value="year">Year</option>
+										<option value="keyword">Key</option>
+									</select>
+
+									<select class="form-control" name="orderby">
+										<option value="ASC">Asc</option>
+										<option value="Desc">Des</option>
+									</select>
+									<button class="btn btn-sm btn-primary" name="sortby" type="submit">Sort</button>
+					</div>
+					</form>
 					<table class="table table-bordered">
 						<tr>
 						    <th>Author</th>
@@ -60,17 +81,17 @@
 						 <?php
 						 for ($x = 0; $x <count($allRefrenceResult); $x++){?>
 						 	<tr>
-							  <td><?php echo $allRefrenceResult[$x]['id']; ?></td>
+							  <td><?php echo $allRefrenceResult[$x]['author']; ?></td>
 							  <td>
 								  <li class="todo-list-item">
 									  	<div class="checkbox">
 											<input type="checkbox" id="deleteid[]" name="deleteid[]" value="<?php echo $allRefrenceResult[$x]['id']; ?>"/>
-											<label for="checkbox"><?php echo $allRefrenceResult[$x]['displayname']; ?></label>
+											<label for="checkbox"><?php echo $allRefrenceResult[$x]['title']; ?></label>
 										</div>
 									</li>
 							  </td>
-							  <td><?php echo $allRefrenceResult[$x]['owneremail']; ?></td>
-							  <td>Key</td>
+							  <td><?php echo $allRefrenceResult[$x]['year']; ?></td>
+							  <td><?php echo $allRefrenceResult[$x]['keyword']; ?></td>
 							</tr>
 						 <?php
 						 }
