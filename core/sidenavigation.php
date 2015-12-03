@@ -1,5 +1,5 @@
 <?php
-	require_once "database.php";
+require_once "database.php";
 	//connect to our db
 	$db = new Db();
 	$userOwnLibrary = $db->getUserOwnLibrary($_SESSION["user_login"]);
@@ -7,6 +7,13 @@
 	
 ?>
 <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+	<ul class="nav menu">
+	<li><a href="userindex.php"><svg class="glyph stroked home"><use xlink:href="#stroked-home"/></use></svg> Home</a></li>
+	<li><a href="trashfolder.php"><svg class="glyph stroked folder"><use xlink:href="#stroked-folder"/></use></svg> Trash</a>
+	<li><a href="sharelist.php"><svg class="glyph stroked clipboard with paper"><use xlink:href="#stroked-clipboard-with-paper"/>
+	</use></svg> Share List</a>
+	</li>
+	</ul>
 <!-- ----------------------------------------------------------------------------------- -->
 	<div class="panel-body divider">
 		<div class="form-group">
@@ -62,7 +69,7 @@
 			<form role="form" id="usersAccountForm" name="usersAccountForm" action="userindex.php" method="POST">
 				<fieldset>
 					<div class="form-group">
-						<input class="form-control" type="hidden" name="activelibraryid" value="<?php echo $_SESSION["ActiveLibraryid"];?>" readonly>
+					<input class="form-control" type="hidden" name="activelibraryid" value="<?php echo $_SESSION["ActiveLibraryid"];?>" readonly>
 					</div>
 					<div class="form-group">
 						<label>Active Library Share With</label>
@@ -134,7 +141,7 @@
 			</div>
 			<div class="form-group">
 				<label>Libraries to Search</label>
-				<select multiple class="form-control" name="selectedLibraries[]">
+				<select multiple class="form-control" name="selectedLibraries[]" required>
 					<?php
 					foreach ($userOwnLibrary as  $key=>$value) {
 						?><option value=<?php echo $value[0]?>><?php echo $value[1] ?></option>;

@@ -21,7 +21,7 @@
 	if(isset($_POST["deleteselectedrefrence"])){
 		foreach($_POST['deleteid'] as $item){
 		  // query to delete where item = $item
-			$db->deleterefrence($item);
+			$db->deletereTrash($item);
 		}
 		
 	}
@@ -29,10 +29,13 @@
 
 
 	//get all refrence for current user
-	$allRefrenceResult = $db->getAllRefrence($_SESSION["user_login"]);
+	$TrashListResult = $db->getTrashRefrence('Default');
 		//sortby form handler
 	if(isset($_POST["sortby"])){
-	    $db->getAllRefrence($_POST);
+	    $db->getTrashRefrence($_POST);
+	}
+	if(isset($_POST["emptyTrash"])){
+	    $db->emptyTrash($trashid);
 	}
 ?>
 <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">		
@@ -58,7 +61,7 @@
 					}
 
 					?>
-					<form role="form" action="deleterefrence.php" method="POST">
+					<form role="form" action="trashfolder.php" method="POST">
 					<div class="form-group form-inline">
 									<label>Sort by:</label>
 									<select class="form-control" name="columnname">
@@ -73,8 +76,10 @@
 										<option value="Desc">Des</option>
 									</select>
 									<button class="btn btn-sm btn-primary" name="sortby" type="submit">Sort</button>
+									<button class="btn btn-sm btn-primary" name="emptyTrash" type="submit">Empty rash</button>
 					</div>
 					</form>
+
 					<table class="table table-bordered">
 						<tr>
 						    <th>Author</th>
@@ -82,23 +87,23 @@
 						    <th>year</th>
 						    <th>Key</th>
 						<td>
-						 <form role="form" action="deleterefrence.php" method="POST">
+						 <form role="form" action="trashfolder.php" method="POST">
 						 	<fieldset>
 							<div class="form-group">
 						 <?php
-						 for ($x = 0; $x <count($allRefrenceResult); $x++){?>
+						 for ($x = 0; $x <count($TrashListResult); $x++){?>
 						 	<tr>
-							  <td><?php echo $allRefrenceResult[$x]['author']; ?></td>
+							  <td><?php echo $TrashListResult[$x]['author']; ?></td>
 							  <td>
 								  <li class="todo-list-item">
 									  	<div class="checkbox">
-											<input type="checkbox" id="deleteid[]" name="deleteid[]" value="<?php echo $allRefrenceResult[$x]['id']; ?>"/>
-											<label for="checkbox"><?php echo $allRefrenceResult[$x]['title']; ?></label>
+											<input type="checkbox" id="deleteid[]" name="deleteid[]" value="<?php echo $TrashListResult[$x]['id']; ?>"/>
+											<label for="checkbox"><?php echo $TrashListResult[$x]['title']; ?></label>
 										</div>
 									</li>
 							  </td>
-							  <td><?php echo $allRefrenceResult[$x]['year']; ?></td>
-							  <td><?php echo $allRefrenceResult[$x]['keyword']; ?></td>
+							  <td><?php echo $TrashListResult[$x]['year']; ?></td>
+							  <td><?php echo $TrashListResult[$x]['keyword']; ?></td>
 							</tr>
 						 <?php
 						 }

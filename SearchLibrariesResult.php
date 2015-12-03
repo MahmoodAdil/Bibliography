@@ -25,7 +25,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">Welcome</div>
+					<div class="panel-heading">Search Result</div>
 					<?php
 					//temprery code remove after success from userindex page
 					//there is no problem in commented from remove comment after success
@@ -33,35 +33,30 @@
 						if(isset($_POST["SearchLibraries"])){
 						    //$refrenceResult = $db->getRefrence($_POST['editrefid']);
 						    //editrefid =>edit refrence id
-						    print_r($_POST);
+						    $searchResult=$db->searchLibraries($_POST);
 						}
 
 					?>
 					<div class="panel-body">
 						<div class="col-md-6">
-							<!-- <form role="form" action="editrefrencetolibrary.php" method="POST">
-									<div class="form-group">
-										<input class="form-control" type="hidden" name="id" value="<?php $refrenceResult[0]['id']; ?>" readonly>
-									</div>
-									<div class="form-group">
-										<label>Title</label>
-										<input class="form-control" type="text" name="title" value="<?php echo $refrenceResult[0]['title']; ?>" required>
-									</div>
-																	
-									<div class="form-group">
-										<label>Author</label>
-										<input class="form-control" type="text" name="author" value="<?php echo $refrenceResult[0]['author']; ?>" required>
-									</div>
-									<div class="form-group">
-										<label>Year</label>
-										<input class="form-control" type="text" name="year" maxlength="4" size="4" value="<?php echo $refrenceResult[0]['year']; ?>" required>
-									</div>
-									<div class="form-group">
-										<label>Abstract</label>
-										<textarea class="form-control" name="abstract" rows="4" required><?php echo $refrenceResult[0]['abstract']; ?></textarea>
-									</div>
-									<button class="btn btn-lg btn-primary" name="editRefLibrary" type="submit">Edit</button>
-							</form> -->
+							<table class="table table-bordered">
+						<tr>
+						    <th>Author</th>
+						    <th>Title</th> 
+						    <th>year</th>
+						    <th>Key</th>
+						 <?php
+						 for ($x = 0; $x <count($searchResult); $x++){?>
+						 	<tr>
+							  <td><?php echo $searchResult[$x]['author']; ?></td>
+							  <td><?php echo $searchResult[$x]['title']; ?></td>
+							  <td><?php echo $searchResult[$x]['year']; ?></td>
+							  <td><?php echo $searchResult[$x]['keyword']; ?></td>
+							</tr>
+						 <?php
+						 }
+						 ?>
+					</table>
 						</div>
 						</div><!-- panel-body -->
 				</div>

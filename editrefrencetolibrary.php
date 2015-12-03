@@ -1,5 +1,5 @@
 <?php
-	include "core/header.php";
+include "core/header.php";
 	include "core/lock.php";
 	require_once "database.php";
 	
@@ -52,7 +52,7 @@
 										<label>Abstract</label>
 										<textarea class="form-control" name="abstract" rows="4" required><?php echo $refrenceResult[0]['abstract']; ?></textarea>
 									</div>
-									<button class="btn btn-lg btn-primary" name="editRefLibrary" type="submit">Edit</button>
+									<button class="btn btn-lg btn-primary" name="editRefLibrary" type="submit">Save</button>
 							</form>
 						</div>
 						</div><!-- panel-body -->

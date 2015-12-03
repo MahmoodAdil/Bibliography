@@ -4,16 +4,16 @@ class Db {
     
     protected $con;
     //localhost
-    private $host = "localhost";
-    private $user = "root";
-    private $pwd = "";
-    private $db = "bibliographyDB";
+    // private $host = "localhost";
+    // private $user = "root";
+    // private $pwd = "";
+    // private $db = "bibliographyDB";
 
     //http://bibliography.azurewebsites.net/
-    // private $host = "eu-cdbr-azure-west-c.cloudapp.net";
-    // private $user = "bbafb55bdffce4";
-    // private $pwd ="5a4ecc10";
-    // private $db = "TecLogLog";
+    private $host = "eu-cdbr-azure-west-c.cloudapp.net";
+    private $user = "bbafb55bdffce4";
+    private $pwd ="5a4ecc10";
+    private $db = "TecLogLog";
    
     //bibliography.esy.es
     // private $host = "mysql.hostinger.co.uk";
@@ -63,6 +63,16 @@ class Db {
                 echo $e->getMessage();
                 }
         }//END function createTable()
+        // function for drop usersaccount table
+    public function dropTableusersaccount() {
+        try {
+            $sql = "DROP TABLE usersaccount;";
+            $this->con->query($sql);
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
         public function createLibraryTable() {
             try {
                 $sql = "CREATE TABLE IF NOT EXISTS library (
@@ -78,6 +88,16 @@ class Db {
                 echo $e->getMessage();
                 }
         }//END function createTable()
+        // function for drop dropTablelibrary table
+    public function dropTablelibrary() {
+        try {
+            $sql = "DROP TABLE library;";
+            $this->con->query($sql);
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
         public function createSharedLibraryTable() {
             try {
                 $sql = "CREATE TABLE IF NOT EXISTS sharedlibrary (
@@ -92,6 +112,16 @@ class Db {
                 echo $e->getMessage();
                 }
         }//END function sharedLibrary()
+        // function for drop Tablesharedlibrary table
+    public function dropTablesharedlibrary() {
+        try {
+            $sql = "DROP TABLE sharedlibrary;";
+            $this->con->query($sql);
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
         public function createReferenceTable() {
             try {
                 $sql = "CREATE TABLE IF NOT EXISTS reference (
@@ -110,6 +140,16 @@ class Db {
                 echo $e->getMessage();
                 }
         }//END createReferenceTable sharedLibrary()
+        // function for drop Tablesharedlibrary table
+    public function dropTablereference() {
+        try {
+            $sql = "DROP TABLE reference;";
+            $this->con->query($sql);
+            return true;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
         //usersAccountSignup
         public function usersAccountSignup($params) {
         try {
@@ -509,7 +549,7 @@ class Db {
     public function editRefToLibrary($refdata) {
         try {
                  $id=$refdata['editid'];
-                 echo "string".$id;
+                 //echo "string".$id;
                 $query = $this->con->prepare("UPDATE reference 
                 SET 
                   title = :newtitle,
@@ -552,11 +592,10 @@ class Db {
                 $orderby='DESC';
             }
 
-
+            $trashid=($_SESSION["user_trashid"]);
             $owneremail=($_SESSION["user_login"]);
-            $query = $this->con->prepare("SELECT * FROM library,reference WHERE library.owneremail= :owneremail AND reference.idoflibrary=library.id ORDER BY $columnname $orderby;");
-            // $query->bindParam(':columnname', $columnname);
-            // $query->bindParam(':orderby', $orderby);
+            $query = $this->con->prepare("SELECT * FROM library,reference WHERE library.owneremail= :owneremail AND reference.idoflibrary=library.id AND reference.idoflibrary!=:trashid ORDER BY $columnname $orderby;");
+            $query->bindParam(':trashid', $trashid);
             $query->bindParam(':owneremail', $owneremail);
             $query->execute();
             return $query->fetchAll();
@@ -564,21 +603,116 @@ class Db {
             echo $e->getMessage();
         }
     }//getRefrence END
+     public function getTrashRefrence($sorting){//getAllRefrence($email){
+        try{
+            if(isset($_POST["sortby"])){
+                $columnname=$_POST['columnname'];
+                 $orderby=$_POST['orderby'];
+            }
+            else{
+                $columnname='year';
+                $orderby='DESC';
+            }
+
+            $trashid=($_SESSION["user_trashid"]);
+            $query = $this->con->prepare("SELECT * FROM reference WHERE idoflibrary=:idoflibrary ORDER BY $columnname $orderby;");
+            $query->bindParam(':idoflibrary', $trashid);
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }//TrashList END
     public function deleterefrence($refid){
         try{
-            // $deleteid=$refid['deleteid'];
-            // echo "string".$refid;
+            $trashid=($_SESSION["user_trashid"]);
+            //$deleteid=$refid['deleteid'];
+                 //echo "string".$id;
+                $query = $this->con->prepare("UPDATE reference 
+                SET 
+                  idoflibrary = :idoflibrary
+                WHERE id= '$refid'");
+                  $query->bindParam(':idoflibrary', $trashid);
+                $query->execute();
+                $_SESSION['refrence_deleted']="Refrence has been Deleted! Temprary Refrence moved to Trash.";
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }//deleterefrence END
+    public function deletereTrash($deleteid){//delete selected refrences rom trash
+        try{
             $query = $this->con->prepare("DELETE FROM reference WHERE id= :deleteid;");
-            $query->bindParam(':deleteid', $refid);
+            $query->bindParam(':deleteid', $deleteid);
             $query->execute();
             return $query->fetchAll();
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
     }//deleterefrence END
+    public function emptyTrash($trashid){//delete all refrence from trash
+        try{
+            $query = $this->con->prepare("DELETE FROM reference WHERE idoflibrary= :idoflibrary;");
+            $query->bindParam(':idoflibrary', $trashid);
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }//emptyTrash END
+    //function for get max id from notes table
+    public function getTrashID() {
+        try{      
+            $owneremail=($_SESSION["user_login"]); 
+            $libraryName='Trash';
+            $query = $this->con->prepare("SELECT id FROM library WHERE owneremail= :owneremail AND displayname=:displayname;");
+            $query->bindParam(':owneremail', $owneremail);
+            $query->bindParam(':displayname', $libraryName);
+            $query->execute();
+            return $query->fetch()[0];
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+    public function getShareList(){//getShareList 
+        try{
+            
+            $owneremail=($_SESSION["user_login"]);
+            $query = $this->con->prepare("SELECT * FROM sharedlibrary,library WHERE library.owneremail= :owneremail AND library.id=sharedlibrary.idoflibrary;");
+            $query->bindParam(':owneremail', $owneremail);
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }//getShareList END
+     public function unshareLibrarywith($LibrowIndex){//delete all refrence from trash
+        try{
+            $query = $this->con->prepare("DELETE FROM sharedlibrary WHERE rowIndex= :rowIndex;");
+            $query->bindParam(':rowIndex', $LibrowIndex);
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }//unshareLibrarywith END
+    public function searchLibraries($searchPram){//getShareList 
+        try{
+            $searchauthor=ltrim($searchPram['searchauthor']);
+            $searchtitle=ltrim($searchPram['searchtitle']);
+            $searchyear=ltrim($searchPram['searchyear']);
+            // $selectedLibraries[]=$searchPram['selectedLibraries'];
 
-    
+
+            foreach($_POST['selectedLibraries'] as $item){
+                $selectedLibraries=$item;
+            }
+            $query = $this->con->prepare("SELECT * FROM reference WHERE author LIKE '%$searchauthor%' OR title LIKE '%$searchtitle%' OR year LIKE '%$searchyear%' AND idoflibrary='$selectedLibraries';");
+           // $query->bindParam(':author', $searchauthor);
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }//searchLibraries END
 }
 ?>
-
-            
