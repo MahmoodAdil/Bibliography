@@ -8,14 +8,15 @@ require_once "database.php";
 ?>
 <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
 	<ul class="nav menu">
-	<li><a href="userindex.php"><svg class="glyph stroked home"><use xlink:href="#stroked-home"/></use></svg> Home</a></li>
-	<li><a href="trashfolder.php"><svg class="glyph stroked folder"><use xlink:href="#stroked-folder"/></use></svg> Trash</a>
-	<li><a href="sharelist.php"><svg class="glyph stroked clipboard with paper"><use xlink:href="#stroked-clipboard-with-paper"/>
-	</use></svg> Share List</a>
-	</li>
+		<li><a href="userindex.php"><svg class="glyph stroked home"><use xlink:href="#stroked-home"/></use></svg> Home</a></li>
+		<li><a href="trashfolder.php"><svg class="glyph stroked folder"><use xlink:href="#stroked-folder"/></use></svg> Trash</a>
+		<li><a href="sharelist.php"><svg class="glyph stroked clipboard with paper"><use xlink:href="#stroked-clipboard-with-paper"/>
+		</use></svg> Share List</a>
+		</li>
+		<li><a href="deleterefrence.php"><svg class="glyph stroked cancel"><use xlink:href="#stroked-cancel"/></use></svg> Delete Refrence</a></li>
 	</ul>
 <!-- ----------------------------------------------------------------------------------- -->
-	<div class="panel-body divider">
+<!-- 	<div class="panel-body divider"> -->
 		<div class="form-group">
 				<form role="form" id="usersAccountForm" name="usersAccountForm" action="userindex.php" method="POST">
 					<fieldset>
@@ -34,7 +35,7 @@ require_once "database.php";
 					</fieldset>
 				</form>
 			</div>
-		</div><!-- panel-body -->
+		<!-- </div>panel-body -->
 <!-- ----------------------------------------------------------------------------------- -->
 	<div class="panel-body divider">
 		<div class="form-group">
@@ -47,7 +48,7 @@ require_once "database.php";
 		</div>
 	</div>
 <!-- ----------------------------------------------------------------------------------- -->
-	<div class="panel-body divider">
+<!-- 	<div class="panel-body divider"> -->
 		<div class="form-group">
 			<form role="form" id="usersAccountForm" name="usersAccountForm" action="userindex.php" method="POST">
 				<fieldset>
@@ -62,9 +63,9 @@ require_once "database.php";
 				</fieldset>
 			</form>
 		</div>
-	</div><!-- panel-body -->
+<!-- 	</div>panel-body -->
 	<!-- ----------------------------------------------------------------------------------- -->
-	<div class="panel-body divider">
+	<!-- <div class="panel-body divider"> -->
 		<div class="form-group">
 			<form role="form" id="usersAccountForm" name="usersAccountForm" action="userindex.php" method="POST">
 				<fieldset>
@@ -79,10 +80,10 @@ require_once "database.php";
 				</fieldset>
 			</form>
 		</div>
-	</div><!-- panel-body -->
+	<!-- </div> --><!-- panel-body -->
 
 <!-- ----------------------------------------------------------------------------------- -->
-	<div class="panel-body divider">
+	<!-- <div class="panel-body divider"> -->
 		<div class="form-group">
 				<form role="form" id="usersAccountForm" name="usersAccountForm" action="userindex.php" method="POST">
 					<fieldset>
@@ -105,9 +106,9 @@ require_once "database.php";
 					</fieldset>
 				</form>
 			</div>
-		</div><!-- panel-body -->
+		<!-- </div> --><!-- panel-body -->
 <!-- ----------------------------------------------------------------------------------- -->
-<div class="panel-body divider">
+<!-- <div class="panel-body divider"> -->
 	<div class="form-group">	
 		<form role="form" id="usersAccountForm" name="usersAccountForm" action="userindex.php" method="POST">
 			<fieldset>
@@ -126,7 +127,7 @@ require_once "database.php";
 			</fieldset>
 		</form>
 	</div>
-</div><!-- panel-body -->
+<!-- </div> --><!-- panel-body -->
 <!-- ----------------------------------------------------------------------------------- -->
 	<div class="form-group">
 		<form role="search" id="SearchLibraries" name="SearchLibraries" action="SearchLibrariesResult.php" method="POST">
@@ -153,7 +154,4 @@ require_once "database.php";
 			<button class="btn btn-sm btn-primary" name="SearchLibraries" id="SearchLibraries" type="submit">Search</button>
 		</form>
 	</div>
-	<ul class="nav menu">
-			<li><a href="deleterefrence.php"><svg class="glyph stroked cancel"><use xlink:href="#stroked-cancel"/></use></svg> Delete Refrence</a></li>
-	</ul>
 </div><!--/.sidebar-->

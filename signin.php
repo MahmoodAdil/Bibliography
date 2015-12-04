@@ -39,7 +39,7 @@
 								<label>Password</label>
 								<input class="form-control" placeholder="Password" name="password" type="password" value="" min="5" required>
 							</div>
-							<button class="btn btn-lg btn-primary" name="usersAccountSignin" id="usersAccountSignin" type="submit">Submit</button>
+							<button class="btn btn-lg btn-primary" name="usersAccountSignin" id="usersAccountSignin" type="submit">Signin</button>
 						</fieldset>
 					</form>
 				</div>

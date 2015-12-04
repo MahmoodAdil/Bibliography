@@ -11,9 +11,9 @@ class Db {
 
     //http://bibliography.azurewebsites.net/
     private $host = "eu-cdbr-azure-west-c.cloudapp.net";
-    private $user = "bbafb55bdffce4";
-    private $pwd ="5a4ecc10";
-    private $db = "TecLogLog";
+    private $user = "bb8269b77776da";
+    private $pwd ="79dbac5e";
+    private $db = "bibliographyDB";
    
     //bibliography.esy.es
     // private $host = "mysql.hostinger.co.uk";
