@@ -10,7 +10,7 @@ class Db {
     // private $db = "bibliographyDB";
 
     //http://bibliography.azurewebsites.net/
-    private $host = "eu-cdbr-azure-west-c.cloudapp.net";
+    private $host = "eu-cdbr-azure-north-d.cloudapp.net";
     private $user = "bb8269b77776da";
     private $pwd ="79dbac5e";
     private $db = "bibliographyDB";
