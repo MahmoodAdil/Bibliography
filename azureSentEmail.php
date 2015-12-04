@@ -39,5 +39,7 @@ echo "3";
 echo "4";
  // print everything out
  print_r($response);
+ $cars = array("Volvo", "BMW", "Toyota");
+ print_r($cars)
  echo "5";
  ?>
