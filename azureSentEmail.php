@@ -3,6 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+echo "1";
  $url = 'https://api.sendgrid.com/';
  $user = 'adil';
  $pass = 'CS615Assignment'; 
@@ -21,7 +22,7 @@ error_reporting(E_ALL);
 
  // Generate curl request
  $session = curl_init($request);
-
+echo "2";
  // Tell curl to use HTTP POST
  curl_setopt ($session, CURLOPT_POST, true);
 
@@ -31,11 +32,12 @@ error_reporting(E_ALL);
  // Tell curl not to return headers, but do return the response
  curl_setopt($session, CURLOPT_HEADER, false);
  curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-
+echo "3";
  // obtain response
  $response = curl_exec($session);
  curl_close($session);
-
+echo "4";
  // print everything out
  print_r($response);
+ echo "5";
  ?>
