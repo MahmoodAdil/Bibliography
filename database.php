@@ -678,13 +678,10 @@ class Db {
         try{
             
             $owneremail=($_SESSION["user_login"]);
-            // $query = $this->con->prepare("SELECT * FROM sharedlibrary,library 
-            // 							   WHERE library.owneremail= :owneremail 
-            // 							   AND library.id=sharedlibrary.idoflibrary;");
-              $query = $this->con->prepare("SELECT * FROM sharedlibrary,library 
-            							   WHERE sharedlibrary.sharewithemail= :owneremail 
-            							   AND library.id=sharedlibrary.idoflibrary
-            							   OR sharedlibrary.idoflibrary=library.id;");
+            $query = $this->con->prepare("SELECT * FROM library,sharedlibrary 
+            							   WHERE sharedlibrary.sharewithemail= :owneremail
+            							   AND sharedlibrary.idoflibrary=library.id
+            							   OR library.id=sharedlibrary.idoflibrary;");
             $query->bindParam(':owneremail', $owneremail);
             $query->execute();
             return $query->fetchAll();
