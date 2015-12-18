@@ -678,7 +678,13 @@ class Db {
         try{
             
             $owneremail=($_SESSION["user_login"]);
-            $query = $this->con->prepare("SELECT * FROM sharedlibrary,library WHERE library.owneremail= :owneremail AND library.id=sharedlibrary.idoflibrary;");
+            // $query = $this->con->prepare("SELECT * FROM sharedlibrary,library 
+            // 							   WHERE library.owneremail= :owneremail 
+            // 							   AND library.id=sharedlibrary.idoflibrary;");
+              $query = $this->con->prepare("SELECT * FROM sharedlibrary,library 
+            							   WHERE sharedlibrary.sharewithemail= :owneremail 
+            							   AND library.id=sharedlibrary.idoflibrary
+            							   OR sharedlibrary.idoflibrary=library.id;");
             $query->bindParam(':owneremail', $owneremail);
             $query->execute();
             return $query->fetchAll();
@@ -699,18 +705,31 @@ class Db {
     public function searchLibraries($searchPram){//getShareList 
         try{
             $searchauthor=ltrim($searchPram['searchauthor']);
+            $searchauthor="%".$searchauthor."%";
             $searchtitle=ltrim($searchPram['searchtitle']);
             $searchyear=ltrim($searchPram['searchyear']);
-            // $selectedLibraries[]=$searchPram['selectedLibraries'];
+            //$selectedLibraries[]=$searchPram['selectedLibraries'];
 
 
             foreach($_POST['selectedLibraries'] as $item){
                 $selectedLibraries=$item;
-            }
-            $query = $this->con->prepare("SELECT * FROM reference WHERE author LIKE '%$searchauthor%' OR title LIKE '%$searchtitle%' OR year LIKE '%$searchyear%' AND idoflibrary='$selectedLibraries';");
-           // $query->bindParam(':author', $searchauthor);
+            $query = $this->con->prepare("SELECT * FROM reference WHERE author LIKE :author OR title LIKE :searchtitle OR year LIKE :searchyear AND idoflibrary=$selectedLibraries;");
+            //$query = $this->con->prepare("SELECT * FROM reference WHERE author LIKE '%$searchauthor%' OR title LIKE '%$searchtitle%' OR year LIKE '%$searchyear%' AND idoflibrary='$selectedLibraries';");
+            $query->bindParam(':author', $searchauthor);
+            $query->bindParam(':searchtitle', $searchtitle);
+            $query->bindParam(':searchyear', $searchyear);
+            //$query->bindParam(':selectedLibraries', $selectedLibraries[]);
             $query->execute();
             return $query->fetchAll();
+            }
+            // $query = $this->con->prepare("SELECT * FROM reference WHERE author LIKE ':author' OR title LIKE ':searchtitle' OR year LIKE ':searchyear' AND idoflibrary='$selectedLibraries';");
+            // //$query = $this->con->prepare("SELECT * FROM reference WHERE author LIKE '%$searchauthor%' OR title LIKE '%$searchtitle%' OR year LIKE '%$searchyear%' AND idoflibrary='$selectedLibraries';");
+            // $query->bindParam(':author', $searchauthor);
+            // $query->bindParam(':searchtitle', $searchtitle);
+            // $query->bindParam(':searchyear', $searchyear);
+            // //$query->bindParam(':selectedLibraries', $selectedLibraries[]);
+            // $query->execute();
+            // return $query->fetchAll();
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
