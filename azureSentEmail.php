@@ -14,10 +14,10 @@ $mail->Password = 'SLDLSLKsdsd45345';//'YOUR PASSWORD';    // SMTP password
 $mail->SMTPSecure = 'tls';                        // Enable TLS/SSL encryption 
 $mail->Port = 587;                                      // TCP port to connect to
 
-$mail->From = '143net4u@gmail.com'; 
+$mail->From = 'webmaster@bibliography.azurewebsites.net'; 
 $mail->FromName = 'Bibliography Manager'; 
-$mail->addAddress('adil143m@gmail.com', 'Bibliography');     // Add a recipient
-$mail->CC('adil143m@gmail.com');     // Add a recipient
+$mail->addAddress('adil143m@gmail.com', $emailToSent);     // Add a recipient
+//$mail->CC('adil143m@gmail.com');     // Add a recipient
 
 $mail->WordWrap = 50;                              // Set word wrap to 50 characters 
 $mail->isHTML(true);                                  // Set email format to HTML
