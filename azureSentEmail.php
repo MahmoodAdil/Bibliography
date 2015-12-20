@@ -1,11 +1,10 @@
 <?php 
 require 'PHPMailer/PHPMailerAutoload.php';
-echo "string";
 $mail = new PHPMailer;
 
 //$mail->SMTPDebug = 3;                          // Enable verbose debug output
 $domainname= "http://bibliography.azurewebsites.net";
-$emailToSent='adil.mahmood.2012@mumail.ie';
+//$emailToSent='adil.mahmood.2012@mumail.ie';
 $mail->isSMTP();                                        // Set mailer to use SMTP 
 $mail->Host = 'smtp.sendgrid.net';             // Specify main/backup SMTP servers 
 $mail->SMTPAuth = true;                           // Enable SMTP authentication 
@@ -24,7 +23,7 @@ $mail->isHTML(true);                                  // Set email format to HTM
 
 $mail->Subject = 'Email Verification'; 
 $mail->Body    = '
-                    <p>Thanks for signing up CC TEST!</p>
+                    <p>Thanks for signing up!</p>
                     <p>Your account has been created, you can login with the following credentials after you have activated</p>
                     <p>your account by pressing the url below.</p>
                  	
@@ -32,11 +31,11 @@ $mail->Body    = '
                    
                     '.$domainname.'/verify.php?email='.$emailToSent.'.';
 
-if(!$mail->send()) { 
-    echo 'Message could not be sent.'; 
-    echo 'Mailer Error: ' . $mail->ErrorInfo; 
-} else { 
-    echo 'Message has been sent'; 
-}
+// if(!$mail->send()) { 
+//     echo 'Message could not be sent.'; 
+//     echo 'Mailer Error: ' . $mail->ErrorInfo; 
+// } else { 
+//     echo 'Message has been sent'; 
+// }
 
 ?>
