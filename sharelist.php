@@ -30,6 +30,7 @@
 
 	//get all share list of current user
 	$ShareListResult = $db->getShareList('Default');
+	$MyShareListResult = $db->getMyShareList('Default');
 ?>
 <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">		
 		<div class="row">
@@ -54,11 +55,51 @@
 					}
 
 					?>
+					<h3>My Shared Libraries!</h3>
 					<table class="table table-bordered">
 						<tr>
 						    <th>Unshare</th>
 						    <th>Display Name</th>
-						    <th>Share with</th> 
+						    <th>Shared With</th> 
+						<td>
+						 <form role="form" action="sharelist.php" method="POST">
+						 	<fieldset>
+							<div class="form-group">
+						 <?php
+						 for ($x = 0; $x <count($MyShareListResult); $x++){?>
+						 	<tr>
+							  <td>
+								  <li class="todo-list-item">
+									  	<div class="checkbox">
+											<input type="checkbox" id="libraryid[]" name="libraryid[]" value="<?php echo $MyShareListResult[$x]['rowIndex']; ?>"/>
+										</div>
+									</li>
+							  </td>
+							  <td><?php echo $MyShareListResult[$x]['displayname']; ?></td>
+							  <td><?php echo $MyShareListResult[$x]['sharewithemail']; ?></td>
+							</tr>
+						 <?php
+						 }
+						 ?>
+							</div>
+
+							<tr>
+								<div class="form-group">
+								<td>
+								<button class="btn btn-lg btn-primary" name="unsharelist" id="unsharelist" type="submit">Unshare</button>
+								</td>
+								</div>
+							</tr>
+						</fieldset>
+						</form>
+					</table>
+					<!--***************************************My Friend Share with me****************************************************-->
+					<h3>Libraries Shared with Me!</h3>
+					<table class="table table-bordered">
+						<tr>
+						    <th>Unshare</th>
+						    <th>Display Name</th>
+						    <th>Owner Email</th> 
 						<td>
 						 <form role="form" action="sharelist.php" method="POST">
 						 	<fieldset>
@@ -74,7 +115,7 @@
 									</li>
 							  </td>
 							  <td><?php echo $ShareListResult[$x]['displayname']; ?></td>
-							  <td><?php echo $ShareListResult[$x]['sharewithemail']; ?></td>
+							  <td><?php echo $ShareListResult[$x]['owneremail']; ?></td>
 							</tr>
 						 <?php
 						 }

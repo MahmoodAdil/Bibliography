@@ -677,11 +677,29 @@ class Db {
     public function getShareList(){//getShareList 
         try{
             
-            $owneremail=($_SESSION["user_login"]);
+            $owneremail=($_SESSION["user_login"]);//login user email
+
             $query = $this->con->prepare("SELECT * FROM library,sharedlibrary 
             							   WHERE sharedlibrary.sharewithemail= :owneremail
-            							   AND sharedlibrary.idoflibrary=library.id
-            							   OR library.id=sharedlibrary.idoflibrary;");
+            							   AND library.id=sharedlibrary.idoflibrary;");
+            $query->bindParam(':owneremail', $owneremail);
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }//getShareList END
+    public function getMyShareList(){//getMyShareList with my friend
+        try{
+            
+            $owneremail=($_SESSION["user_login"]);//login user email
+            // $query = $this->con->prepare("SELECT * FROM library,sharedlibrary 
+            // 							   WHERE sharedlibrary.sharewithemail= :owneremail
+            // 							   AND sharedlibrary.idoflibrary=library.id
+            // 							   OR library.id=sharedlibrary.idoflibrary;");
+                        $query = $this->con->prepare("SELECT * FROM library,sharedlibrary 
+            							   WHERE library.owneremail= :owneremail
+            							   AND library.id=sharedlibrary.idoflibrary;");
             $query->bindParam(':owneremail', $owneremail);
             $query->execute();
             return $query->fetchAll();
