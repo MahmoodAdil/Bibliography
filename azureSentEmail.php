@@ -26,8 +26,8 @@ $mail->Body    = '
                     <p>Thanks for signing up!</p>
                     <p>Your account has been created, you can login with the following credentials after you have activated</p>
                     <p>your account by pressing the url below.</p>
-                 
-                    <b>Please click this link to activate your account:</b>
+                 	
+                    <b><p>Please click this link to activate your account:</p></b>
                    
                     '.$domainname.'/verify.php?email='.$emailToSent.'.';
 
