@@ -288,6 +288,7 @@ class Db {
         }       
     }//public function emailComfirmation($email) END
     public function emailSentToUser($email) {
+        echo "email first line";
        $emailToSent=$email; // Send email to our user
        //include "azureSentEmail.php";
         //$domainname= "http://bibliography.esy.es";
@@ -323,6 +324,7 @@ class Db {
                             <b><p>Please click this link to activate your account:</p></b>
                            
                             '.$domainname.'/verify.php?email='.$emailToSent.'.';
+                            echo "email last line";
         /********************************************************/
         // $to      = $email; // Send email to our user
         // $subject = 'Signup | Verification'; // Give the email a subject 
