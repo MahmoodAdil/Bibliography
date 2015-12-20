@@ -17,7 +17,7 @@ $mail->Port = 587;                                      // TCP port to connect t
 
 $mail->From = 'webmaster@bibliography.azurewebsites.net'; 
 $mail->FromName = 'Bibliography Manager'; 
-$mail->addAddress('adil143m@gmail.com', .'$emailToSent'.);     // Add a recipient
+$mail->addAddress('adil143m@gmail.com', '$emailToSent');     // Add a recipient
 //$mail->CC('adil143m@gmail.com');     // Add a recipient
 
 $mail->WordWrap = 50;                              // Set word wrap to 50 characters 
@@ -37,7 +37,7 @@ if(!$mail->send()) {
     echo 'Message could not be sent.'; 
     echo 'Mailer Error: ' . $mail->ErrorInfo; 
 } else { 
-    echo '17 Message has been sent to '.$emailToSent.'; 
+    echo '18 Message has been sent to '.$emailToSent.'; 
 }
 
 ?>
