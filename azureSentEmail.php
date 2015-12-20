@@ -1,5 +1,5 @@
 <?php 
-require 'PHPMailerAutoload.php';
+require 'PHPMailer/PHPMailerAutoload.php';
 echo "string";
 $mail = new PHPMailer;
 
