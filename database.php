@@ -292,7 +292,7 @@ class Db {
        include "azureSentEmail.php";
 
         /********************************************************/
-        include "hostingerSentEmail.php";
+        //include "hostingerSentEmail.php";
         /********************************************************/
 
         

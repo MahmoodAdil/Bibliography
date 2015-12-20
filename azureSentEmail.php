@@ -1,8 +1,8 @@
 <?php 
 require 'PHPMailer/PHPMailerAutoload.php';
 $domainname= "http://bibliography.azurewebsites.net";
-$emailToSent='adil.mahmood.2012@mumail.ie';
-//$emailToSent=$email; // Send email to our user
+//$emailToSent='adil.mahmood.2012@mumail.ie';
+$emailToSent=$email; // Send email to our user
 
 $mail = new PHPMailer;
 
