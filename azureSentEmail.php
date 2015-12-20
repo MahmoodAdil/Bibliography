@@ -1,44 +1,33 @@
-<?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+<?php 
+require 'PHPMailerAutoload.php';
 
-echo "1";
- $url = 'https://api.sendgrid.com/';
- $user = 'adil';
- $pass = 'CS615Assignment'; 
+$mail = new PHPMailer;
 
- $params = array(
-      'api_user' => $user,
-      'api_key' => $pass,
-      'to' => 'adil143m@gmail.com',
-      'subject' => 'testing from curl',
-      'html' => 'testing body',
-      'text' => 'testing body',
-      'from' => 'adil143m@hotmail.com',
-   );
+//$mail->SMTPDebug = 3;                          // Enable verbose debug output
 
- $request = $url.'api/mail.send.json';
+$mail->isSMTP();                                        // Set mailer to use SMTP 
+$mail->Host = 'smtp.sendgrid.net';             // Specify main/backup SMTP servers 
+$mail->SMTPAuth = true;                           // Enable SMTP authentication 
+$mail->Username = 'azure_cdf577451af1ffd1d93f2d69ce47caa2@azure.com';//'YOUR USERNAME';    // SMTP username 
+$mail->Password = 'SLDLSLKsdsd45345';//'YOUR PASSWORD';    // SMTP password 
+$mail->SMTPSecure = 'tls';                        // Enable TLS/SSL encryption 
+$mail->Port = 587;                                      // TCP port to connect to
 
- // Generate curl request
- $session = curl_init($request);
-echo "2";
- // Tell curl to use HTTP POST
- curl_setopt ($session, CURLOPT_POST, true);
+$mail->From = '143net4u@gmail.com'; 
+$mail->FromName = 'From SendGrid website'; 
+$mail->addAddress('adil143m@gmail.com', 'Support');     // Add a recipient
 
- // Tell curl that this is the body of the POST
- curl_setopt ($session, CURLOPT_POSTFIELDS, $params);
+$mail->WordWrap = 50;                              // Set word wrap to 50 characters 
+$mail->isHTML(true);                                  // Set email format to HTML
 
- // Tell curl not to return headers, but do return the response
- curl_setopt($session, CURLOPT_HEADER, false);
- curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-echo "3";
- // obtain response
- $response = curl_exec($session);
- curl_close($session);
-echo "4";
- // print everything out
- print_r($response);
+$mail->Subject = 'Here is the subject'; 
+$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
 
- echo "5";
- ?>
+if(!$mail->send()) { 
+    echo 'Message could not be sent.'; 
+    echo 'Mailer Error: ' . $mail->ErrorInfo; 
+} else { 
+    echo 'Message has been sent'; 
+}
+
+?>
