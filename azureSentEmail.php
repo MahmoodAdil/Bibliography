@@ -16,14 +16,15 @@ $mail->Port = 587;                                      // TCP port to connect t
 
 $mail->From = '143net4u@gmail.com'; 
 $mail->FromName = 'Bibliography Manager'; 
-$mail->addAddress('adil143m@gmail.com', $emailToSent,'CC: adil143m@gmail.com');     // Add a recipient
+$mail->addAddress('adil143m@gmail.com', 'Bibliography');     // Add a recipient
+$mail->CC('adil143m@gmail.com');     // Add a recipient
 
 $mail->WordWrap = 50;                              // Set word wrap to 50 characters 
 $mail->isHTML(true);                                  // Set email format to HTML
 
 $mail->Subject = 'Email Verification'; 
 $mail->Body    = '
-                    <p>Thanks for signing up!</p>
+                    <p>Thanks for signing up CC TEST!</p>
                     <p>Your account has been created, you can login with the following credentials after you have activated</p>
                     <p>your account by pressing the url below.</p>
                  	
