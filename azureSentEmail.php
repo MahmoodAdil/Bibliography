@@ -16,7 +16,7 @@ $mail->Port = 587;                                      // TCP port to connect t
 
 $mail->From = '143net4u@gmail.com'; 
 $mail->FromName = 'Bibliography Manager'; 
-$mail->addAddress('adil143m@gmail.com', .'$emailToSent'.);     // Add a recipient
+$mail->addAddress('adil143m@gmail.com', '.'$emailToSent'.');     // Add a recipient
 
 $mail->WordWrap = 50;                              // Set word wrap to 50 characters 
 $mail->isHTML(true);                                  // Set email format to HTML
