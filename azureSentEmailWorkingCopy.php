@@ -4,8 +4,7 @@ echo "string";
 $mail = new PHPMailer;
 
 //$mail->SMTPDebug = 3;                          // Enable verbose debug output
-$domainname= "http://bibliography.azurewebsites.net";
-$emailToSent='adil.mahmood.2012@mumail.ie';
+
 $mail->isSMTP();                                        // Set mailer to use SMTP 
 $mail->Host = 'smtp.sendgrid.net';             // Specify main/backup SMTP servers 
 $mail->SMTPAuth = true;                           // Enable SMTP authentication 
@@ -15,21 +14,14 @@ $mail->SMTPSecure = 'tls';                        // Enable TLS/SSL encryption
 $mail->Port = 587;                                      // TCP port to connect to
 
 $mail->From = '143net4u@gmail.com'; 
-$mail->FromName = 'From SendGrid website'; 
-$mail->addAddress('adil143m@gmail.com', .'$emailToSent'.);     // Add a recipient
+$mail->FromName = 'From Bibliography Manager'; 
+$mail->addAddress('adil143m@gmail.com', 'Support');     // Add a recipient
 
 $mail->WordWrap = 50;                              // Set word wrap to 50 characters 
 $mail->isHTML(true);                                  // Set email format to HTML
 
-$mail->Subject = 'Email Verification'; 
-$mail->Body    = '
-                    <p>Thanks for signing up!</p>
-                    <p>Your account has been created, you can login with the following credentials after you have activated</p>
-                    <p>your account by pressing the url below.</p>
-                 
-                    <b>Please click this link to activate your account:</b>
-                   
-                    '.$domainname.'/verify.php?email='.$emailToSent.'';
+$mail->Subject = 'Your Email Verification'; 
+$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
 
 if(!$mail->send()) { 
     echo 'Message could not be sent.'; 
