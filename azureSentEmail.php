@@ -2,6 +2,7 @@
 require 'PHPMailer/PHPMailerAutoload.php';
 $domainname= "http://bibliography.azurewebsites.net";
 $emailToSent='adil.mahmood.2012@mumail.ie';
+//$emailToSent=$email; // Send email to our user
 
 $mail = new PHPMailer;
 
@@ -17,7 +18,7 @@ $mail->Port = 587;                                      // TCP port to connect t
 
 $mail->From = 'webmaster@bibliography.azurewebsites.net'; 
 $mail->FromName = 'Bibliography Manager'; 
-$mail->addAddress('adil143m@gmail.com', '.$emailToSent.');     // Add a recipient
+$mail->addAddress('adil143m@gmail.com', .'$emailToSent'.'');     // Add a recipient
 //$mail->CC('adil143m@gmail.com');     // Add a recipient
 
 $mail->WordWrap = 50;                              // Set word wrap to 50 characters 
@@ -37,7 +38,7 @@ if(!$mail->send()) {
     echo 'Message could not be sent.'; 
     echo 'Mailer Error: ' . $mail->ErrorInfo; 
 } else { 
-    echo '21 Message has been sent to '.$emailToSent.''; 
+    echo '22 Message has been sent to '.$emailToSent.''; 
 }
 
 ?>
