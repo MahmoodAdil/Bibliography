@@ -288,7 +288,6 @@ class Db {
         }       
     }//public function emailComfirmation($email) END
     public function emailSentToUser($email) {
-       include "azureSentEmail.php";
        $emailToSent=$email; // Send email to our user
        include "azureSentEmail.php";
         //$domainname= "http://bibliography.esy.es";
