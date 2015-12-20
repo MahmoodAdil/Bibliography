@@ -29,13 +29,13 @@ $mail->Body    = '
                  	
                     <b><p>Please click this link to activate your account:</p></b>
                    
-                    '.$domainname.'/verify.php?email='.$emailToSent.'.';
+                    '.$domainname.'/verify.php?email='.$emailToSent.'';
 
 if(!$mail->send()) { 
     echo 'Message could not be sent.'; 
     echo 'Mailer Error: ' . $mail->ErrorInfo; 
 } else { 
-    echo '15Message has been sent to .'$emailToSent''; 
+    echo '16Message has been sent to .$emailToSent'; 
 }
 
 ?>
