@@ -10,16 +10,16 @@ class Db {
     // private $db = "bibliographyDB";
 
     //http://bibliography.azurewebsites.net/
-    private $host = "eu-cdbr-azure-north-d.cloudapp.net";
+/*    private $host = "eu-cdbr-azure-north-d.cloudapp.net";
     private $user = "bb8269b77776da";
     private $pwd ="79dbac5e";
-    private $db = "bibliographyDB";
+    private $db = "bibliographyDB";*/
    
     //bibliography.esy.es
-    // private $host = "mysql.hostinger.co.uk";
-    // private $user = "u974722529_adil";
-    // private $pwd = "ficXpKVdAN5";
-    // private $db = "u974722529_cs615";
+    private $host = "mysql.hostinger.co.uk";
+    private $user = "u909038910_adil";
+    private $pwd = "wyqxUkp3yug5";
+    private $db = "u909038910_cs615";
 
     
     
