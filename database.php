@@ -289,10 +289,10 @@ class Db {
     }//public function emailComfirmation($email) END
     public function emailSentToUser($email) {
       // $emailToSent=$email; // Send email to our user
-       include "azureSentEmail.php";
+       //include "azureSentEmail.php";
 
         /********************************************************/
-        //include "hostingerSentEmail.php";
+        include "hostingerSentEmail.php";
         /********************************************************/
 
         
